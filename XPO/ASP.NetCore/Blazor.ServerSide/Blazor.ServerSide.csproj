@@ -8,35 +8,46 @@
 		<PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
 		
 		<Reference Include="DevExpress.Data.v22.1">
-			<HintPath>C:\Work\DXSource\2022.1\Bin\NETCore\DevExpress.Data.v22.1.dll</HintPath>
+			<HintPath>D:\Work\DXSource\2022.1\Bin\NETCore\DevExpress.Data.v22.1.dll</HintPath>
+		</Reference>
+		
+		<Reference Include="DevExpress.ExpressApp.Security.AspNetCore.v22.1">
+		  <HintPath>D:\Work\DXSource\2022.1\Bin\NETCore\DevExpress.ExpressApp.Security.AspNetCore.v22.1.dll</HintPath>
 		</Reference>
 		<Reference Include="DevExpress.ExpressApp.Security.Xpo.v22.1">
-			<HintPath>C:\Work\DXSource\2022.1\Bin\NETCore\DevExpress.ExpressApp.Security.Xpo.v22.1.dll</HintPath>
+			<HintPath>D:\Work\DXSource\2022.1\Bin\NETCore\DevExpress.ExpressApp.Security.Xpo.v22.1.dll</HintPath>
 		</Reference>
 		<Reference Include="DevExpress.ExpressApp.Xpo.v22.1">
-			<HintPath>C:\Work\DXSource\2022.1\Bin\NETCore\DevExpress.ExpressApp.Xpo.v22.1.dll</HintPath>
+			<HintPath>D:\Work\DXSource\2022.1\Bin\NETCore\DevExpress.ExpressApp.Xpo.v22.1.dll</HintPath>
 		</Reference>
 		<Reference Include="DevExpress.ExpressApp.v22.1">
-			<HintPath>C:\Work\DXSource\2022.1\Bin\NETCore\DevExpress.ExpressApp.v22.1.dll</HintPath>
+			<HintPath>D:\Work\DXSource\2022.1\Bin\NETCore\DevExpress.ExpressApp.v22.1.dll</HintPath>
 		</Reference>
 		<Reference Include="DevExpress.ExpressApp.Security.v22.1">
-			<HintPath>C:\Work\DXSource\2022.1\Bin\NETCore\DevExpress.ExpressApp.Security.v22.1.dll</HintPath>
+			<HintPath>D:\Work\DXSource\2022.1\Bin\NETCore\DevExpress.ExpressApp.Security.v22.1.dll</HintPath>
 		</Reference>
 		<Reference Include="DevExpress.Blazor.v22.1">
-			<HintPath>C:\Work\DXSource\2022.1\Bin\NETCore\DevExpress.Blazor.v22.1.dll</HintPath>
+			<HintPath>D:\Work\DXSource\2022.1\Bin\NETCore\DevExpress.Blazor.v22.1.dll</HintPath>
 		</Reference>
 		<Reference Include="DevExpress.Persistent.Base.v22.1">
-			<HintPath>C:\Work\DXSource\2022.1\Bin\NETCore\DevExpress.Persistent.Base.v22.1.dll</HintPath>
+			<HintPath>D:\Work\DXSource\2022.1\Bin\NETCore\DevExpress.Persistent.Base.v22.1.dll</HintPath>
 		</Reference>
 		<Reference Include="DevExpress.Persistent.BaseImpl.Xpo.v22.1">
-			<HintPath>C:\Work\DXSource\2022.1\Bin\NETCore\DevExpress.Persistent.BaseImpl.Xpo.v22.1.dll</HintPath>
+			<HintPath>D:\Work\DXSource\2022.1\Bin\NETCore\DevExpress.Persistent.BaseImpl.Xpo.v22.1.dll</HintPath>
 		</Reference>
 
-		<StaticWebAsset Include="C:\Work\DXSource\2022.1\Bin\NETCore\staticwebassets\DevExpress.Blazor\wwwroot\**">
+		<StaticWebAsset Include="D:\Work\DXSource\2022.1\Bin\NETCore\staticwebassets\DevExpress.Blazor\wwwroot\**">
 			<SourceType>Package</SourceType>
 			<SourceId>DevExpress.Blazor</SourceId>
-			<ContentRoot>C:\Work\DXSource\2022.1\Bin\NETCore\staticwebassets\DevExpress.Blazor\wwwroot\</ContentRoot>
+			<ContentRoot>D:\Work\DXSource\2022.1\Bin\NETCore\staticwebassets\DevExpress.Blazor\wwwroot\</ContentRoot>
 			<BasePath>_content/DevExpress.Blazor</BasePath>
+			<RelativePath>%(RecursiveDir)%(FileName)%(Extension)</RelativePath>
+		</StaticWebAsset>
+		<StaticWebAsset Include="D:\Work\DXSource\2022.1\Bin\NETCore\staticwebassets\DevExpress.Blazor.Themes\wwwroot\**">
+			<SourceType>Package</SourceType>
+			<SourceId>DevExpress.Blazor.Themes</SourceId>
+			<ContentRoot>D:\Work\DXSource\2022.1\Bin\NETCore\staticwebassets\DevExpress.Blazor.Themes\wwwroot\</ContentRoot>
+			<BasePath>_content/DevExpress.Blazor.Themes</BasePath>
 			<RelativePath>%(RecursiveDir)%(FileName)%(Extension)</RelativePath>
 		</StaticWebAsset>
 	</ItemGroup>

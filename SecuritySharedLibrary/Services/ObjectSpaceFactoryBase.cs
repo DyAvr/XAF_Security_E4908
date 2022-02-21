@@ -1,23 +1,24 @@
 ﻿using DevExpress.ExpressApp;
 using DevExpress.ExpressApp.Security;
+using DevExpress.ExpressApp.Security.AspNetCore;
 using DevExpress.ExpressApp.Services;
 
 namespace SecutirySharedLibrary.Services {
     public abstract class ObjectSpaceFactoryBase : IDisposable, IObjectSpaceFactory {
         readonly ISecurityStrategyBase security;
-        readonly PrincipalAuthenticationService xafSecurityLogin;
+        readonly IXafSecurityAuthenticationService xafSecurityAuthenticationService;
         IObjectSpaceProvider? objectSpaceProvider;
         IObjectSpaceProvider? nonSecuredObjectSpaceProvider;
 
-        public ObjectSpaceFactoryBase(ISecurityStrategyBase security, PrincipalAuthenticationService xafSecurityLogin) {
+        public ObjectSpaceFactoryBase(ISecurityStrategyBase security, IXafSecurityAuthenticationService xafSecurityLogin) {
             this.security = (SecurityStrategyComplex)security;
-            this.xafSecurityLogin = xafSecurityLogin;
+            this.xafSecurityAuthenticationService = xafSecurityLogin;
         }
         protected abstract IObjectSpaceProvider CreateObjectSpaceProvider(ISecurityStrategyBase security);
 
         IObjectSpaceProvider GetObjectSpaceProvider(Type entityType) {
-            xafSecurityLogin.XafSecurityEnsureLogon(this);
             if (objectSpaceProvider == null) {
+                xafSecurityAuthenticationService.EnsureLogon(this);
                 objectSpaceProvider = CreateObjectSpaceProvider(security);
             }
             return objectSpaceProvider;
@@ -28,9 +29,9 @@ namespace SecutirySharedLibrary.Services {
                 nonSecuredObjectSpaceProvider = CreateObjectSpaceProvider(security);
             return (INonsecuredObjectSpaceProvider)nonSecuredObjectSpaceProvider;
         }
-        IObjectSpace IObjectSpaceFactory.CreateObjectSpace(Type entityType) => GetObjectSpaceProvider(entityType).CreateObjectSpace();
+        public IObjectSpace CreateObjectSpace(Type entityType) => GetObjectSpaceProvider(entityType).CreateObjectSpace();
 
-        IObjectSpace IObjectSpaceFactory.CreateNonSecuredObjectSpace(Type entityType) => GetNonSecuredObjectSpaceProvider(entityType).CreateNonsecuredObjectSpace();
+        public IObjectSpace CreateNonSecuredObjectSpace(Type entityType) => GetNonSecuredObjectSpaceProvider(entityType).CreateNonsecuredObjectSpace();
 
         public IObjectSpace CreateUpdatingObjectSpace(bool allowUpdateSchema) => ((IObjectSpaceProvider)GetNonSecuredObjectSpaceProvider(security.UserType)).CreateUpdatingObjectSpace(allowUpdateSchema);
 

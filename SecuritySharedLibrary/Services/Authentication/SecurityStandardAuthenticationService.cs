@@ -5,13 +5,13 @@ using DevExpress.ExpressApp.Services;
 using System.Security.Claims;
 
 namespace SecutirySharedLibrary.Services {
-    public class SecurityStandartAuthenticationService {
+    public class SecurityStandardAuthenticationService {
 
         readonly ISecurityUserProvider securityUserProvider;
         readonly ISecurityStrategyBase security;
         readonly IObjectSpaceFactory objectSpaceFactory;
 
-        public SecurityStandartAuthenticationService(ISecurityStrategyBase security, IObjectSpaceFactory objectSpaceFactory, ISecurityUserProvider securityUserProvider) {
+        public SecurityStandardAuthenticationService(ISecurityStrategyBase security, IObjectSpaceFactory objectSpaceFactory, ISecurityUserProvider securityUserProvider) {
             this.security = security;
             this.objectSpaceFactory = objectSpaceFactory;
             this.securityUserProvider = securityUserProvider;

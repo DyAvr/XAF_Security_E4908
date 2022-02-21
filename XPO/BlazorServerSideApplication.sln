@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessObjectsLibrary", "B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseUpdater", "DatabaseUpdater\DatabaseUpdater.csproj", "{CE88C0FE-06E3-4751-B178-0A6824005D87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecuritySharedLibrary", "..\SecuritySharedLibrary\SecuritySharedLibrary.csproj", "{299B2B03-0ABE-41DE-B074-0C116CB9620D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecuritySharedLibrary", "..\SecuritySharedLibrary\SecuritySharedLibrary.csproj", "{299B2B03-0ABE-41DE-B074-0C116CB9620D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

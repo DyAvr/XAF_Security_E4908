@@ -8,9 +8,9 @@ using System.Security.Claims;
 
 namespace Blazor.ServerSide.Pages {
     public class LoginModel : PageModel {
-        readonly SecurityStandartAuthenticationService securityStandartAuthenticationService;
+        readonly SecurityStandardAuthenticationService securityStandartAuthenticationService;
 
-        public LoginModel(SecurityStandartAuthenticationService securityStandartAuthenticationService) {
+        public LoginModel(SecurityStandardAuthenticationService securityStandartAuthenticationService) {
             this.securityStandartAuthenticationService = securityStandartAuthenticationService;
         }
 

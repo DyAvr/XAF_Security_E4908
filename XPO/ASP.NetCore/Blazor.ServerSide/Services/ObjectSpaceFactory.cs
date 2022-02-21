@@ -1,6 +1,7 @@
 ﻿using DevExpress.ExpressApp;
 using DevExpress.ExpressApp.DC;
 using DevExpress.ExpressApp.Security;
+using DevExpress.ExpressApp.Security.AspNetCore;
 using DevExpress.ExpressApp.Security.ClientServer;
 using DevExpress.ExpressApp.Xpo;
 using SecutirySharedLibrary.Services;
@@ -9,7 +10,7 @@ namespace Blazor.ServerSide.Services {
     public class ObjectSpaceFactory : ObjectSpaceFactoryBase {
         readonly IXpoDataStoreProvider xpoDataStoreProvider;
         readonly ITypesInfo typesInfo;
-        public ObjectSpaceFactory(ISecurityStrategyBase security, IXpoDataStoreProvider xpoDataStoreProvider, PrincipalAuthenticationService xafSecurityLogin, ITypesInfo typesInfo) : base(security, xafSecurityLogin) {
+        public ObjectSpaceFactory(ISecurityStrategyBase security, IXpoDataStoreProvider xpoDataStoreProvider, IXafSecurityAuthenticationService xafSecurityAuthenticationService, ITypesInfo typesInfo) : base(security, xafSecurityAuthenticationService) {
             this.typesInfo = typesInfo;
             this.xpoDataStoreProvider = xpoDataStoreProvider;
         }

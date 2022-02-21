@@ -1,14 +1,13 @@
-﻿@inject NavigationManager navigationManager
+﻿@using DevExpress.ExpressApp.Security.AspNetCore
+
+@inject NavigationManager navigationManager
+@inject IPrincipalProvider principalProvider
+@inject IXafSecurityAuthenticationService xafSecurityAuthenticationService
+@inject IObjectSpaceFactory objectSpaceFactory
 
 <Router AppAssembly="@typeof(Program).Assembly">
     <Found Context="routeData">
         <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
-            <NotAuthorized>
-                @{
-                    string returnUrl = $"~/{navigationManager.ToBaseRelativePath(navigationManager.Uri)}";
-                    navigationManager.NavigateTo($"Login?returnUrl={returnUrl}", forceLoad: true);
-                }
-            </NotAuthorized>
         </AuthorizeRouteView>
     </Found>
     <NotFound>
@@ -19,3 +18,27 @@
         </CascadingAuthenticationState>
     </NotFound>
 </Router>
+
+@code{
+    protected override void OnInitialized() {
+        base.OnInitialized();
+        //Fast check
+        if (!principalProvider.User.Identity.IsAuthenticated) {
+            string returnUrl = $"~/{navigationManager.ToBaseRelativePath(navigationManager.Uri)}";
+            navigationManager.NavigateTo($"Login?returnUrl={returnUrl}", forceLoad: true);
+        }else{
+            try {
+                //TODO
+                //Hard check
+                xafSecurityAuthenticationService.EnsureLogon(objectSpaceFactory);
+            } catch  {
+                //The authentication token exists but isn't valid
+                navigationManager.NavigateTo($"api/logout", forceLoad: true);
+
+                //TODO add returnUrl support 
+                //string returnUrl = $"~/{navigationManager.ToBaseRelativePath(navigationManager.Uri)}";
+                //navigationManager.NavigateTo($"api/logout?returnUrl={returnUrl}", forceLoad: true);            
+            }
+        }
+    }
+}

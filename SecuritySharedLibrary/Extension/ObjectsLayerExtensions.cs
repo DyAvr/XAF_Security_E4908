@@ -1,4 +1,5 @@
-﻿using DevExpress.ExpressApp.DC;
+﻿using DevExpress.ExpressApp;
+using DevExpress.ExpressApp.DC;
 using DevExpress.ExpressApp.Security;
 using DevExpress.ExpressApp.Services;
 using Microsoft.Extensions.Options;
@@ -26,21 +27,19 @@ namespace Microsoft.Extensions.DependencyInjection {
             services.Configure(options);
 
             services.AddSingleton<ITypesInfo>(s => {
-                    TypesInfo typesInfo = new TypesInfo();
-                    var o = s.GetRequiredService<IOptions<XafSecurityObjectsLayerOptions>>();
-                    o.Value.Events.CustomizeTypesInfo?.Invoke(typesInfo, s);
-                    return typesInfo;
+                //TODO WTF?????
+                TypesInfo typesInfo = (TypesInfo)XafTypesInfo.Instance;//new TypesInfo();
+
+                var o = s.GetRequiredService<IOptions<XafSecurityObjectsLayerOptions>>();
+                o.Value.Events.CustomizeTypesInfo?.Invoke(typesInfo, s);
+                return typesInfo;
             });
             
 
             services.AddScoped<IObjectSpaceFactory, T>();
 
-            services.AddScoped<SecurityStandartAuthenticationService>();
+            services.AddScoped<SecurityStandardAuthenticationService>();
             services.AddScoped<ISecurityProvider, SecurityProvider>();
-            services.AddScoped<PrincipalAuthenticationService>();
-            services.AddScoped<IPrincipalProvider, PrincipalProvider>();
-            services.AddScoped(serviceProvider => (IPrincipalProviderInitializer)serviceProvider.GetRequiredService<IPrincipalProvider>());
-
             return services;
         }
     }

@@ -2,11 +2,14 @@
 @attribute [Authorize]
 @implements IDisposable
 @inject IObjectSpaceFactory objectSpaceFactory
-@inject IPrincipalProviderInitializer principalProviderInitializer
 @inject ISecurityProvider securityProvider;
 
 <div style="text-align: right; margin: 10px">
     <a class="ml-md-auto btn btn-primary" href="/logout">Log Out</a>
+</div>
+
+<div style="text-align: right; margin: 10px">
+    <a class="ml-md-auto btn btn-primary" href="/CustomPage">customPage</a>
 </div>
 
 <CascadingValue Value="objectSpace">
@@ -113,16 +116,16 @@
     Employee employee = null;
     IObjectSpace objectSpace;
 
-    protected SecurityStrategy Security => securityProvider.GetSecurity();
+    protected SecurityStrategy Security { get; private set; }
 
-    protected override async Task OnInitializedAsync() {
-        await principalProviderInitializer.InitializeUserAsync();
-        objectSpace = objectSpaceFactory.CreateObjectSpace<Employee>();
+    protected override void OnInitialized() {
+        Security = securityProvider.GetSecurity();
+        objectSpace = objectSpaceFactory.CreateObjectSpace(typeof(Employee));
         employees = objectSpace.GetObjectsQuery<Employee>();
         departments = objectSpace.GetObjectsQuery<Department>();
+        base.OnInitialized();
+    }    
 
-        await base.OnInitializedAsync();
-    }
     Task OnRowRemoving(object item) {
         objectSpace.Delete(item);
         objectSpace.CommitChanges();
