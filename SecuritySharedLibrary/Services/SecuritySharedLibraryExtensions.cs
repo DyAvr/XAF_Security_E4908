@@ -1,15 +1,14 @@
 ﻿using DevExpress.ExpressApp;
 using DevExpress.ExpressApp.DC;
-using DevExpress.ExpressApp.Security;
 using DevExpress.ExpressApp.Services;
 using Microsoft.Extensions.Options;
-using SecutirySharedLibrary.Services;
+using SecuritySharedLibrary.Services;
 
 namespace Microsoft.Extensions.DependencyInjection {
-    public static class ObjectsLayerExtensions{
+    public static class SecuritySharedLibraryExtensions {
 
         public class XafSecurityObjectsLayerEvents {
-            public Action<ITypesInfo, IServiceProvider>? CustomizeTypesInfo { get; set; } 
+            public Action<ITypesInfo, IServiceProvider>? CustomizeTypesInfo { get; set; }
         }
 
         public class XafSecurityObjectsLayerOptions {
@@ -18,9 +17,9 @@ namespace Microsoft.Extensions.DependencyInjection {
 
 
         }
-        public static IServiceCollection AddXafSecurityObjectsLayer<T>(this IServiceCollection services) where T : ObjectSpaceFactoryBase => services.AddXafSecurityObjectsLayer<T>(_ => { });
-       
-        public static IServiceCollection AddXafSecurityObjectsLayer<T>(this IServiceCollection services, Action<XafSecurityObjectsLayerOptions> options) where T : ObjectSpaceFactoryBase{
+        public static IServiceCollection AddXafSecurityObjectsLayer<T>(this IServiceCollection services) where T : class, IObjectSpaceProviderCreator => services.AddXafSecurityObjectsLayer<T>(_ => { });
+
+        public static IServiceCollection AddXafSecurityObjectsLayer<T>(this IServiceCollection services, Action<XafSecurityObjectsLayerOptions> options) where T : class, IObjectSpaceProviderCreator {
             if (options == null) {
                 throw new ArgumentNullException(nameof(options));
             }
@@ -34,12 +33,15 @@ namespace Microsoft.Extensions.DependencyInjection {
                 o.Value.Events.CustomizeTypesInfo?.Invoke(typesInfo, s);
                 return typesInfo;
             });
-            
 
-            services.AddScoped<IObjectSpaceFactory, T>();
+            services.AddScoped<IObjectSpaceProviderCreator, T>();
+
+            services.AddScoped<IObjectSpaceFactory, ObjectSpaceFactory>();
+            services.AddScoped<INonSecuredObjectSpaceFactory, NonSecuredObjectSpaceFactory>();
+            services.AddScoped(s => (IUpdatingObjectSpaceFactory)s.GetRequiredService<INonSecuredObjectSpaceFactory>());
+
 
             services.AddScoped<SecurityStandardAuthenticationService>();
-            services.AddScoped<ISecurityProvider, SecurityProvider>();
             return services;
         }
     }

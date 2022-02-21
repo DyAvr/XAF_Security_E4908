@@ -1,4 +1,3 @@
-using Blazor.ServerSide;
 using Blazor.ServerSide.Services;
 using BusinessObjectsLibrary.BusinessObjects;
 using DevExpress.ExpressApp.DC;
@@ -7,8 +6,6 @@ using DevExpress.ExpressApp.Security;
 using DevExpress.ExpressApp.Xpo;
 using DevExpress.Persistent.BaseImpl.PermissionPolicy;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Components.Server.Circuits;
-using SecutirySharedLibrary.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +19,7 @@ builder.Services.Configure<DevExpress.Blazor.Configuration.GlobalOptions>(option
     options.BootstrapVersion = DevExpress.Blazor.BootstrapVersion.v5;
 });
 
-builder.Services.AddXafSecurityObjectsLayer<ObjectSpaceFactory>(options => {
+builder.Services.AddXafSecurityObjectsLayer<ObjectSpaceProviderCreator>(options => {
     options.Events.CustomizeTypesInfo = (typesInfo, s) => {
         XpoTypesInfoHelper.ForceInitialize();
         ((TypesInfo)typesInfo).GetOrAddEntityStore(ti => new XpoTypeInfoSource(ti));
@@ -60,18 +57,11 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseAuthentication();
-
-
-
-
-
-
-
 app.UseXafAspNetCoreSecurity();
 
 app.UseDefaultFiles();
 app.UseRouting();
-app.UseMiddleware<LogOut>();
+app.UseMiddleware<LogOutMiddleware>();
 
 app.UseEndpoints(endpoints => {
     endpoints.MapFallbackToPage("/_Host");

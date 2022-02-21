@@ -1,8 +1,6 @@
-﻿@using DevExpress.ExpressApp.Security.AspNetCore
-
-@inject NavigationManager navigationManager
+﻿@inject NavigationManager navigationManager
 @inject IPrincipalProvider principalProvider
-@inject IXafSecurityAuthenticationService xafSecurityAuthenticationService
+@inject IAuthenticatedSecurityProvider securityProvider
 @inject IObjectSpaceFactory objectSpaceFactory
 
 <Router AppAssembly="@typeof(Program).Assembly">
@@ -28,9 +26,8 @@
             navigationManager.NavigateTo($"Login?returnUrl={returnUrl}", forceLoad: true);
         }else{
             try {
-                //TODO
                 //Hard check
-                xafSecurityAuthenticationService.EnsureLogon(objectSpaceFactory);
+                securityProvider.EnsureLogon();
             } catch  {
                 //The authentication token exists but isn't valid
                 navigationManager.NavigateTo($"api/logout", forceLoad: true);

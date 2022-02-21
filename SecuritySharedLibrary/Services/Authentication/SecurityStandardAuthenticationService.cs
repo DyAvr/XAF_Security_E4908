@@ -4,16 +4,16 @@ using DevExpress.ExpressApp.Security.Internal;
 using DevExpress.ExpressApp.Services;
 using System.Security.Claims;
 
-namespace SecutirySharedLibrary.Services {
+namespace SecuritySharedLibrary.Services {
     public class SecurityStandardAuthenticationService {
 
         readonly ISecurityUserProvider securityUserProvider;
         readonly ISecurityStrategyBase security;
-        readonly IObjectSpaceFactory objectSpaceFactory;
+        readonly INonSecuredObjectSpaceFactory nonSecuredObjectSpaceFactory;
 
-        public SecurityStandardAuthenticationService(ISecurityStrategyBase security, IObjectSpaceFactory objectSpaceFactory, ISecurityUserProvider securityUserProvider) {
+        public SecurityStandardAuthenticationService(ISecurityStrategyBase security, INonSecuredObjectSpaceFactory nonSecuredObjectSpaceFactory, ISecurityUserProvider securityUserProvider) {
             this.security = security;
-            this.objectSpaceFactory = objectSpaceFactory;
+            this.nonSecuredObjectSpaceFactory = nonSecuredObjectSpaceFactory;
             this.securityUserProvider = securityUserProvider;
         }
 
@@ -29,11 +29,20 @@ namespace SecutirySharedLibrary.Services {
         }
 
         public ClaimsPrincipal? Authenticate(string userName, string password) {
-            using (IObjectSpace loginObjectSpace = objectSpaceFactory.CreateNonSecuredObjectSpace(security.UserType)) {
-                AuthenticationStandardLogonParameters parameters = new AuthenticationStandardLogonParameters(userName, password);
+            return Authenticate(new AuthenticationStandardLogonParameters(userName, password));
+        }
+        public ClaimsPrincipal? Authenticate(IAuthenticationStandardLogonParameters logonParameters) {
+            return AuthenticateCore(logonParameters);
+        }
+
+        private ClaimsPrincipal? AuthenticateCore(IAuthenticationStandardLogonParameters logonParameters) {
+            if (logonParameters == null) {
+                throw new ArgumentNullException(nameof(logonParameters));
+            }
+            using (IObjectSpace loginObjectSpace = nonSecuredObjectSpaceFactory.CreateNonSecuredObjectSpace(security.UserType)) {
                 security.Logoff();
                 try {
-                    var xafUser = (ISecurityUser)securityUserProvider.Authenticate(loginObjectSpace, parameters);
+                    var xafUser = (ISecurityUser)securityUserProvider.Authenticate(loginObjectSpace, logonParameters);
                     if (xafUser != null) {
                         string userKey = loginObjectSpace.GetKeyValueAsString(xafUser);
                         return CreatePrincipal(userKey, xafUser.UserName);

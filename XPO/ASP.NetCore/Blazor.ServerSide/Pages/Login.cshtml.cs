@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using SecutirySharedLibrary.Services;
+using SecuritySharedLibrary.Services;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 

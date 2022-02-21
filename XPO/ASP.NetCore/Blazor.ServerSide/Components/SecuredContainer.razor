@@ -1,8 +1,4 @@
-﻿@using Blazor.ServerSide
-@using DevExpress.ExpressApp
-@using DevExpress.ExpressApp.Security
-
-@inject ISecurityProvider securityProvider
+﻿@inject IAuthenticatedSecurityProvider securityProvider
 
 @if(HasAccess) {
 	@ChildContent(!Security.CanWrite(CurrentObject, PropertyName))
