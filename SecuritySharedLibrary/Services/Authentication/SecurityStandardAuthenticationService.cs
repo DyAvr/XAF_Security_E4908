@@ -5,19 +5,12 @@ using DevExpress.ExpressApp.Services;
 using System.Security.Claims;
 
 namespace SecuritySharedLibrary.Services {
-    public class SecurityStandardAuthenticationService {
 
-        readonly ISecurityUserProvider securityUserProvider;
-        readonly ISecurityStrategyBase security;
-        readonly INonSecuredObjectSpaceFactory nonSecuredObjectSpaceFactory;
-
-        public SecurityStandardAuthenticationService(ISecurityStrategyBase security, INonSecuredObjectSpaceFactory nonSecuredObjectSpaceFactory, ISecurityUserProvider securityUserProvider) {
-            this.security = security;
-            this.nonSecuredObjectSpaceFactory = nonSecuredObjectSpaceFactory;
-            this.securityUserProvider = securityUserProvider;
-        }
-
-        private ClaimsPrincipal CreatePrincipal(string userKey, string userName) {
+    public interface IPrincipalCreator {
+        ClaimsPrincipal CreatePrincipal(string userKey, string userName);
+    }
+    internal class XafSecurityDefaultPrincipalCreator : IPrincipalCreator {
+        public ClaimsPrincipal CreatePrincipal(string userKey, string userName) {
             List<Claim> claims = new List<Claim>{
                 new Claim(ClaimTypes.NameIdentifier, userKey),
                 new Claim(ClaimTypes.Name, userName),
@@ -27,7 +20,21 @@ namespace SecuritySharedLibrary.Services {
             ClaimsPrincipal principal = new ClaimsPrincipal(id);
             return principal;
         }
+    }
 
+    public class SecurityStandardAuthenticationService {
+
+        readonly ISecurityUserProvider securityUserProvider;
+        readonly ISecurityStrategyBase security;
+        readonly INonSecuredObjectSpaceFactory nonSecuredObjectSpaceFactory;
+        readonly IPrincipalCreator principalCreator;
+
+        public SecurityStandardAuthenticationService(ISecurityStrategyBase security, INonSecuredObjectSpaceFactory nonSecuredObjectSpaceFactory, ISecurityUserProvider securityUserProvider, IPrincipalCreator principalCreator) {
+            this.security = security;
+            this.nonSecuredObjectSpaceFactory = nonSecuredObjectSpaceFactory;
+            this.securityUserProvider = securityUserProvider;
+            this.principalCreator = principalCreator;
+        }
         public ClaimsPrincipal? Authenticate(string userName, string password) {
             return Authenticate(new AuthenticationStandardLogonParameters(userName, password));
         }
@@ -45,7 +52,7 @@ namespace SecuritySharedLibrary.Services {
                     var xafUser = (ISecurityUser)securityUserProvider.Authenticate(loginObjectSpace, logonParameters);
                     if (xafUser != null) {
                         string userKey = loginObjectSpace.GetKeyValueAsString(xafUser);
-                        return CreatePrincipal(userKey, xafUser.UserName);
+                        return principalCreator.CreatePrincipal(userKey, xafUser.UserName);
                     }
                 } catch {
                     //XafSecurity authentication failed

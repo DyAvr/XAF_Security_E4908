@@ -42,6 +42,9 @@ namespace Microsoft.Extensions.DependencyInjection {
 
 
             services.AddScoped<SecurityStandardAuthenticationService>();
+
+            services.AddSingleton<IPrincipalCreator, XafSecurityDefaultPrincipalCreator>();
+
             return services;
         }
     }
