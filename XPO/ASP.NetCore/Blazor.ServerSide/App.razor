@@ -30,7 +30,7 @@
                 securityProvider.EnsureLogon();
             } catch  {
                 //The authentication token exists but isn't valid
-                navigationManager.NavigateTo($"api/logout", forceLoad: true);
+                navigationManager.NavigateTo($"/logout", forceLoad: true);
 
                 //TODO add returnUrl support 
                 //string returnUrl = $"~/{navigationManager.ToBaseRelativePath(navigationManager.Uri)}";

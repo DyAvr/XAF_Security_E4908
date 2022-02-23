@@ -39,12 +39,6 @@ namespace Microsoft.Extensions.DependencyInjection {
             services.AddScoped<IObjectSpaceFactory, ObjectSpaceFactory>();
             services.AddScoped<INonSecuredObjectSpaceFactory, NonSecuredObjectSpaceFactory>();
             services.AddScoped(s => (IUpdatingObjectSpaceFactory)s.GetRequiredService<INonSecuredObjectSpaceFactory>());
-
-
-            services.AddScoped<SecurityStandardAuthenticationService>();
-
-            services.AddSingleton<IPrincipalCreator, XafSecurityDefaultPrincipalCreator>();
-
             return services;
         }
     }

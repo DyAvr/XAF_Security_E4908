@@ -1,17 +1,18 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using DevExpress.ExpressApp.Security;
+using DevExpress.ExpressApp.Security.AspNetCore;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using SecuritySharedLibrary.Services;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
 namespace Blazor.ServerSide.Pages {
     public class LoginModel : PageModel {
-        readonly SecurityStandardAuthenticationService securityStandartAuthenticationService;
+        readonly IStandardAuthenticationService authenticationStandard;
 
-        public LoginModel(SecurityStandardAuthenticationService securityStandartAuthenticationService) {
-            this.securityStandartAuthenticationService = securityStandartAuthenticationService;
+        public LoginModel(IStandardAuthenticationService authenticationStandard) {
+            this.authenticationStandard = authenticationStandard;
         }
 
         [BindProperty]
@@ -25,7 +26,7 @@ namespace Blazor.ServerSide.Pages {
         public IActionResult OnPost() {
             Response.Cookies.Append("userName", Input.UserName ?? string.Empty);
             if (ModelState.IsValid) {
-                ClaimsPrincipal principal = securityStandartAuthenticationService.Authenticate(Input.UserName, Input.Password);
+                ClaimsPrincipal principal = authenticationStandard.Authenticate(new AuthenticationStandardLogonParameters(Input.UserName, Input.Password));
                 if (principal != null) {
                     HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
                     return Redirect("/");

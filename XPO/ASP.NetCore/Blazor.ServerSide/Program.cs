@@ -61,7 +61,6 @@ app.UseXafAspNetCoreSecurity();
 
 app.UseDefaultFiles();
 app.UseRouting();
-app.UseMiddleware<LogOutMiddleware>();
 
 app.UseEndpoints(endpoints => {
     endpoints.MapFallbackToPage("/_Host");
