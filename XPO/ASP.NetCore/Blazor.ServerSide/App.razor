@@ -26,8 +26,8 @@
             navigationManager.NavigateTo($"Login?returnUrl={returnUrl}", forceLoad: true);
         }else{
             try {
-                //Hard check
-                securityProvider.EnsureLogon();
+                //Hard check - forse logon
+                securityProvider.GetSecurity();
             } catch  {
                 //The authentication token exists but isn't valid
                 navigationManager.NavigateTo($"/logout", forceLoad: true);

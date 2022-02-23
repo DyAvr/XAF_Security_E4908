@@ -8,10 +8,6 @@
     <a class="ml-md-auto btn btn-primary" href="/logout">Log Out</a>
 </div>
 
-<div style="text-align: right; margin: 10px">
-    <a class="ml-md-auto btn btn-primary" href="/CustomPage">customPage</a>
-</div>
-
 <CascadingValue Value="objectSpace">
     <DxDataGrid Data="employees" KeyFieldName="@nameof(Employee.Oid)" PageSize="20" ShowFilterRow="true" AllowSort="true" @ref="grid">
         <ChildContent>

@@ -18,10 +18,15 @@ namespace Blazor.ServerSide.Pages {
         [BindProperty]
         public InputModel Input { get; set; }
 
-        public void OnGet() {
-            Input = new InputModel();
-            string userName = Request.Cookies["userName"]?.ToString();
-            Input.UserName = userName ?? "User";
+        public IActionResult OnGet() {
+            if (User.Identity.IsAuthenticated) {
+                return Redirect("/");
+            } else {
+                Input = new InputModel();
+                string userName = Request.Cookies["userName"]?.ToString();
+                Input.UserName = userName ?? "User";
+                return Page();
+            }
         }
         public IActionResult OnPost() {
             Response.Cookies.Append("userName", Input.UserName ?? string.Empty);
