@@ -1,5 +1,4 @@
-﻿using DevExpress.ExpressApp;
-using DevExpress.ExpressApp.DC;
+﻿using DevExpress.ExpressApp.DC;
 using DevExpress.ExpressApp.Services;
 using Microsoft.Extensions.Options;
 using SecuritySharedLibrary.Services;
@@ -26,8 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection {
             services.Configure(options);
 
             services.AddSingleton<ITypesInfo>(s => {
-                //TODO WTF?????
-                TypesInfo typesInfo = (TypesInfo)XafTypesInfo.Instance;//new TypesInfo();
+                TypesInfo typesInfo = new TypesInfo();
 
                 var o = s.GetRequiredService<IOptions<XafSecurityObjectsLayerOptions>>();
                 o.Value.Events.CustomizeTypesInfo?.Invoke(typesInfo, s);

@@ -41,15 +41,15 @@
             </DxDataGridComboBoxColumn>
             <DxDataGridCommandColumn Width="100px">
                 <HeaderCellTemplate>
-                    @if(Security.CanCreate<Employee>()) {
+                    @if(securityProvider.GetSecurity().CanCreate<Employee>()) {
                         <button class="btn btn-link" @onclick="@(() => StartRowEdit(null))">New</button>
                     }
                 </HeaderCellTemplate>
                 <CellTemplate>
-                    @if(Security.CanWrite(context)) {
+                    @if(securityProvider.GetSecurity().CanWrite(context)) {
                         <a @onclick="@(() => StartRowEdit(context))" href="javascript:;">Edit </a>
                     }
-                    @if(Security.CanDelete(context)) {
+                    @if(securityProvider.GetSecurity().CanDelete(context)) {
                         <a @onclick="@(() => OnRowRemoving(context))" href="javascript:;">Delete</a>
                     }
                 </CellTemplate>
@@ -111,11 +111,8 @@
     DxDataGrid<Employee> grid;
     Employee employee = null;
     IObjectSpace objectSpace;
-
-    protected SecurityStrategy Security { get; private set; }
-
+        
     protected override void OnInitialized() {
-        Security = securityProvider.GetSecurity();
         objectSpace = objectSpaceFactory.CreateObjectSpace(typeof(Employee));
         employees = objectSpace.GetObjectsQuery<Employee>();
         departments = objectSpace.GetObjectsQuery<Department>();
